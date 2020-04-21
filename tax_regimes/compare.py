@@ -57,7 +57,7 @@ def lowest(
     years: set = set(YEAR_TAX_MAP.keys()),
     display: bool = False
 ) -> int:
-    taxes = _get_taxes(years, income, sec80c, sec80d, sec24b)
+    taxes = _get_taxes(income, sec80c, sec80d, sec24b, years)
     least_tax = min(taxes, key=attrgetter('total_tax'))
 
     if not display:

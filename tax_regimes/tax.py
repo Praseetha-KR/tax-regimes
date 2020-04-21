@@ -44,6 +44,10 @@ class Tax:
     def _normalize(self, value: int, limit: int) -> int:
         return limit if value > limit else value
 
+    def _deduction_str(self, label: str, val: int, limit: int) -> str:
+        _v = " (upto " + str(limit) + "):\t" + str(val) if limit else ":\tNA"
+        return f'{label}{_v}'
+
     def _slab_rate(
         self, income: int, percent: float, lower: int, upper: int = 0
     ) -> int:
@@ -51,35 +55,35 @@ class Tax:
         taxable = up - lower
         return percentage(taxable, percent)
 
-    def taxable_income(self) -> int:
-        return self.gross_income - self.total_deductions()
-
-    def total_deductions(self) -> int:
-        return sum([v for _, v in self.deductions.__dict__.items()])
-
     def slab_tax(self) -> int:
         tax = 0
-        income = self.taxable_income()
+        income = self.taxable_income
         for s in self.SLABS:
             tax += self._slab_rate(income, s.percent, s.lower, s.upper)
             if s.upper and income <= s.upper:
                 return tax
         return tax
 
+    @property
+    def taxable_income(self) -> int:
+        return self.gross_income - self.total_deductions
+
+    @property
+    def total_deductions(self) -> int:
+        return sum([v for _, v in self.deductions.__dict__.items()])
+
+    @property
     def income_tax(self) -> int:
         tax = self.slab_tax()
         return tax if tax > 0 else 0
 
+    @property
     def cess(self) -> int:
-        return percentage(self.income_tax(), 4)
+        return percentage(self.income_tax, 4)
 
     @property
     def total_tax(self) -> int:
-        return self.income_tax() + self.cess()
-
-    def _deduction_str(self, label: str, val: int, limit: int) -> str:
-        _v = " (upto " + str(limit) + "):\t" + str(val) if limit else ":\tNA"
-        return f'{label}{_v}'
+        return self.income_tax + self.cess
 
     def tabular(self) -> str:
         slabs = '\n'.join([
@@ -109,8 +113,8 @@ class Tax:
             ["Gross Income", f'{self.gross_income}'],
             ["Deductions", f'{deductions}'],
             ["Tax Rate for Slabs", f'{slabs}'],
-            ["Income Tax", f'{self.income_tax()}'],
-            ["Cess@4%", f'{self.cess()}'],
+            ["Income Tax", f'{self.income_tax}'],
+            ["Cess@4%", f'{self.cess}'],
             ["Total Tax", f'{self.total_tax}']
         ], header=False)
         return f'\n{self.YEAR} Tax Regime:\n{table.draw()}\n'
