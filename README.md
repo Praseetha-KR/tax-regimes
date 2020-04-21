@@ -7,7 +7,7 @@ Supported years are
 
 ### Sample Usage
 
-```python
+```shell
 In [1]: from tax_regimes import lowest
 
 In [2]: tax = lowest(1234567, 1500000, 35000, 74000)
@@ -43,7 +43,7 @@ Out[5]:
 ```
 
 Or, for interactive version:
-```python
+```shell
 In [1]: from tax_regimes import lowest_via_cli
 
 In [2]: lowest_via_cli()
