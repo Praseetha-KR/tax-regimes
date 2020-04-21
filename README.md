@@ -1,8 +1,6 @@
 # Tax Regimes Comparison
 
-Compares Indian Tax regimes and suggest which one has the lowest tax.
-
-Supported years are
+Compares Indian Tax regimes of 2019 & 2020 and suggest which one has the lowest tax.
 
 
 ### Sample Usage
