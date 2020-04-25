@@ -26,7 +26,7 @@ def _get_taxes(
     ]
 
 
-def get_user_tax_via_cli() -> tuple:
+def get_user_tax_interactive() -> tuple:
     years = set(YEAR_TAX_MAP.keys())
 
     try:
@@ -70,12 +70,12 @@ def lowest(
     t.add_rows([
         ["Lowest Tax Regime", f'✨{least_tax.YEAR}✨'],
         ["Tax to be paid", f'{least_tax.total_tax}']
-    ])
+    ], header=False)
     print(f'\n\nResult: \n{t.draw()}')
     return least_tax
 
 
-def lowest_via_cli() -> None:
+def lowest_interactive() -> None:
     print("\nIndian Tax Regime Comparison\n(All units are in INR)")
-    years, income, sec80c, sec80d, sec24b = get_user_tax_via_cli()
+    years, income, sec80c, sec80d, sec24b = get_user_tax_interactive()
     lowest(years, income, sec80c, sec80d, sec24b, display=True)

@@ -19,10 +19,10 @@ class Slab:
 
 @attr.s
 class Tax:
-    SLABS = [Slab()]
+    YEAR = None
+    SLABS = []
     DEDUCTIONS = Deductions()
-    CESS = 4
-    YEAR = 0
+    CESS = 0
 
     gross_income = attr.ib(default=0)
     deductions = attr.ib(default=Deductions())
@@ -79,7 +79,7 @@ class Tax:
 
     @property
     def cess(self) -> int:
-        return percentage(self.income_tax, 4)
+        return percentage(self.income_tax, self.CESS)
 
     @property
     def total_tax(self) -> int:
@@ -134,6 +134,7 @@ class Tax2019Regime(Tax):
         sec80d=25000,
         sec24b=75000
     )
+    CESS = 4
 
 
 @attr.s
@@ -148,3 +149,4 @@ class Tax2020Regime(Tax):
         Slab(lower=1250000, upper=1500000, percent=25),
         Slab(lower=1500000, percent=30),
     ]
+    CESS = 4
